@@ -11,12 +11,17 @@ defmodule Tasky.Application do
       TaskyWeb.Telemetry,
       Tasky.Repo,
       {DNSCluster, query: Application.get_env(:tasky, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: Tasky.PubSub},
+      {Oban,
+       AshOban.config(
+         Application.fetch_env!(:tasky, :ash_domains),
+         Application.fetch_env!(:tasky, Oban)
+       )},
       # Start the Finch HTTP client for sending emails
-      {Finch, name: Tasky.Finch},
       # Start a worker by calling: Tasky.Worker.start_link(arg)
       # {Tasky.Worker, arg},
       # Start to serve requests, typically the last entry
+      {Phoenix.PubSub, name: Tasky.PubSub},
+      {Finch, name: Tasky.Finch},
       TaskyWeb.Endpoint
     ]
 

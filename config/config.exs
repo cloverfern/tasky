@@ -7,6 +7,15 @@
 # General application configuration
 import Config
 
+config :ash_oban, pro?: false
+
+config :tasky, Oban,
+  engine: Oban.Engines.Basic,
+  notifier: Oban.Notifiers.Postgres,
+  queues: [default: 10, task_update_embeddings: 1],
+  repo: Tasky.Repo,
+  plugins: [{Oban.Plugins.Cron, []}]
+
 config :ash,
   allow_forbidden_field_for_relationships_by_default?: true,
   include_embedded_source_by_default?: false,
@@ -102,3 +111,8 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
+
+# Add custom vector type
+config :tasky, Tasky.Repo,
+log: :debug,
+types: Tasky.PostgrexTypes

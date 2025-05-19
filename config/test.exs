@@ -1,4 +1,5 @@
 import Config
+config :tasky, Oban, testing: :manual
 
 # Configure your database
 #
